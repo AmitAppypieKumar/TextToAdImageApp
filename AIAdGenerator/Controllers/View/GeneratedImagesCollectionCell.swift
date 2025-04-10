@@ -1,8 +1,8 @@
 //
 //  GeneratedImagesCollectionCell.swift
-//  AIStudio
+//  AIAdGenerator
 //
-//  Created by Amit kumar on 25/10/23.
+//  Created by Amit kumar on 09/04/25.
 //
 
 import UIKit
