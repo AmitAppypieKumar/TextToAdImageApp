@@ -30,7 +30,7 @@ class AIAdGeneratorVC: UIViewController {
     @IBOutlet weak var buttonGenerateMore: UIButton!
     
     var generatedImages: [String] = []
-    var callBackForFreeUser: (()->())?
+    let activityIndicator = UIActivityIndicatorView(style: .large)
     
     //MARK: View life cycle functions
     override func viewDidLoad() {
@@ -64,6 +64,10 @@ class AIAdGeneratorVC: UIViewController {
         let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(dismissKeyboard))
         toolbar.items = [flexSpace, doneButton]
         self.textViewPrompt.inputAccessoryView = toolbar
+        //Loader
+        self.activityIndicator.center = view.center
+        self.activityIndicator.hidesWhenStopped = true
+        self.view.addSubview(self.activityIndicator)
     }
     
     @objc func dismissKeyboard() {
@@ -195,7 +199,12 @@ extension AIAdGeneratorVC: UITextViewDelegate {
 extension AIAdGeneratorVC {
     
     fileprivate func getGeneratedAd(prompt: String, outputFormat: String = "png") {
-        let apiKey = "sk-PC8EvBJaePSKBLOqLzGsoL2QHEWiYEX16Hxxi3ujxvdmyWlx"
+        
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+        
+        let apiKey = "YOUR_API_KEY"
         let url = URL(string: "https://api.stability.ai/v2beta/stable-image/generate/sd3")!
 
         var request = URLRequest(url: url)
@@ -230,6 +239,10 @@ extension AIAdGeneratorVC {
             print("response: \(String(describing: response))")
             
             guard let weakSelf = self else { return }
+            DispatchQueue.main.async {
+                weakSelf.activityIndicator.stopAnimating()
+            }
+            
             if let httpResponse = response as? HTTPURLResponse {
                 print("Status Code: \(httpResponse.statusCode)")
             }
